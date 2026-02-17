@@ -1,6 +1,6 @@
 import prisma from "../db/client.ts"
 
-export const candidateEmail = async (email: string) => {
+export const chechEmailOnBase = async (email: string) => {
     return await prisma.user.findUnique({
         where: {
             email: email
@@ -8,7 +8,7 @@ export const candidateEmail = async (email: string) => {
     })
 }
 
-export const candidateNickname = async (nickname: string) => {
+export const checkNicknameOnBase = async (nickname: string) => {
     return await prisma.user.findUnique({
         where: {
             nickname: nickname

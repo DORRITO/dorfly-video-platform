@@ -1,29 +1,61 @@
 import bcrypt from 'bcryptjs'
 import type { Request, Response } from 'express'
-import { candidateEmail, candidateNickname, createUser } from '../services/auth.services.ts'
+import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.services.ts'
+import { sendSuccess, sendError } from '../utils/apiResponse.ts'
 
 export const signUp = async (req: Request, res: Response) => {
     try{
         const { email, nickname, password } = req.body
+
+        if(!email || !password || !nickname){
+            return sendError(res, "Не все данные были предоставлены", 400)
+        }
         
-        let user = await candidateEmail(email)
+        let user = await chechEmailOnBase(email)
         if(user){
-            return res.status(400).json({message: "Такой пользователь уже существует!"})
+            return sendError(res, "Пользователь с такой почтой уже существует", 400)
         }
 
-        user = await candidateNickname(nickname)
+        user = await checkNicknameOnBase(nickname)
         if(user){
-            return res.status(400).json({message: "Такой никнейм уже занят!"})
+            return sendError(res, "Пользователь с таким никнеймом уже существует", 400)
         }
 
         const hashPassword = await bcrypt.hashSync(password, 10)
 
         await createUser(email, nickname, hashPassword)
 
-        res.status(200).json({message: "Пользователь успешно создан!"})
+        return sendSuccess(res, "Пользователь успешно создан!", 200)
 
     } catch(e){
-        res.status(500).json({message: "Error create user"})
+        sendError(res, "Ошибка создания пользователя", 500)
+        console.log(e)
+    }
+}
+
+export const login = async (req: Request, res: Response) => {
+    try{
+        const { email, password } = req.body
+
+        if(!email || !password){
+            return sendError(res, "Не все данные были предоставлены", 400)
+        }
+
+        let user = await chechEmailOnBase(email)
+        if(!user){
+            return sendError(res, "Почта или пароль не верны", 400)
+        }
+
+        const comparePassword = await bcrypt.compare(password, user.password_hash)
+
+        if(!comparePassword){
+            return sendError(res, "Почта или пароль не верны", 400)
+        }
+
+        return sendSuccess(res, "Успешная авторизация!", 200, { user })
+
+    } catch(e) {
+        sendError(res, "Ошибка логина", 500)
         console.log(e)
     }
 }

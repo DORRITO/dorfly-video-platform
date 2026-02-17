@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            String    @id @default(uuid())
   nickname      String    @unique
   email         String    @unique
   password_hash String
@@ -18,54 +18,67 @@ model User {
   
   videos        Video[]
   comments      Comment[]
+
+  followers     Follows[] @relation("following")
+  following     Follows[] @relation("follower")
+}
+
+model Follows {
+  follower    User   @relation("follower", fields: [follower_id], references: [id])
+  follower_id String
+  
+  following    User   @relation("following", fields: [following_id], references: [id])
+  following_id String
+
+  @@id([follower_id, following_id])
 }
 
 model Category {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  preview     String?
+  id            String        @id @default(uuid())
+  name          String        @unique
+  preview       String?
   
   subcategories Subcategory[]
   videos        Video[]
 }
 
 model Subcategory {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   name        String
   category    Category @relation(fields: [category_id], references: [id])
-  category_id Int
+  category_id String 
   videos      Video[]
 }
 
 model Video {
-  id             Int         @id @default(autoincrement())
+  id             String       @id @default(uuid())
   title          String
   description    String?
   video_url      String
   preview        String?
-  views_count    Int         @default(0)
-  created_at     DateTime    @default(now())
+  views_count    Int          @default(0)
+  created_at     DateTime     @default(now())
 
-  creator        User        @relation(fields: [creator_id], references: [id])
-  creator_id     Int
+  creator        User         @relation(fields: [creator_id], references: [id])
+  creator_id     String      
   
-  category       Category    @relation(fields: [category_id], references: [id])
-  category_id    Int
+  category       Category     @relation(fields: [category_id], references: [id])
+  category_id    String    
   
   subcategory    Subcategory? @relation(fields: [subcategory_id], references: [id])
-  subcategory_id Int?
+  subcategory_id String? 
 
   comments       Comment[]
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   text       String
   created_at DateTime @default(now())
 
   video      Video    @relation(fields: [video_id], references: [id])
-  video_id   Int
+  video_id   String  
   
   author     User     @relation(fields: [author_id], references: [id])
-  author_id  Int
+  author_id  String  
 }

@@ -1,10 +1,12 @@
 import express from "express"
 import authRoutes from './src/routes/auth.routes.ts'
 import prisma from "./src/db/client.ts"
+import cookieParser from "cookie-parser"
 import 'dotenv/config'
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use('/auth', authRoutes)
 

@@ -29,8 +29,13 @@ export const signUp = async (req: Request, res: Response) => {
         const tokens = await generateTokens(newUser.id)
         await saveToken(newUser.id, (await tokens).refreshToken)
 
-        return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken, refreshToken: (await tokens).refreshToken })
-
+        res.cookie('refreshToken', tokens.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        })
+        return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken })
     } catch(e){
         sendError(res, "Ошибка создания пользователя", 500)
         console.log(e)
@@ -59,7 +64,13 @@ export const login = async (req: Request, res: Response) => {
         const tokens = await generateTokens(user.id)
         await saveToken(user.id, (await tokens).refreshToken)
 
-        return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken, refreshToken: (await tokens).refreshToken })
+        res.cookie('refreshToken', tokens.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        })
+        return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken })
     } catch(e) {
         sendError(res, "Ошибка логина", 500)
         console.log(e)

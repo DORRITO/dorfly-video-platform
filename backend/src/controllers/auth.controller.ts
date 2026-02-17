@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import type { Request, Response } from 'express'
 import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.services.ts'
 import { sendSuccess, sendError } from '../utils/apiResponse.ts'
+import { generateTokens, saveToken } from '../services/token.services.ts'
 
 export const signUp = async (req: Request, res: Response) => {
     try{
@@ -21,11 +22,14 @@ export const signUp = async (req: Request, res: Response) => {
             return sendError(res, "Пользователь с таким никнеймом уже существует", 400)
         }
 
-        const hashPassword = await bcrypt.hashSync(password, 10)
+        const hashPassword = await bcrypt.hash(password, 10)
 
-        await createUser(email, nickname, hashPassword)
+        const newUser = await createUser(email, nickname, hashPassword)
 
-        return sendSuccess(res, "Пользователь успешно создан!", 200)
+        const tokens = await generateTokens(newUser.id)
+        await saveToken(newUser.id, (await tokens).refreshToken)
+
+        return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken, refreshToken: (await tokens).refreshToken })
 
     } catch(e){
         sendError(res, "Ошибка создания пользователя", 500)
@@ -52,8 +56,10 @@ export const login = async (req: Request, res: Response) => {
             return sendError(res, "Почта или пароль не верны", 400)
         }
 
-        return sendSuccess(res, "Успешная авторизация!", 200, { user })
+        const tokens = await generateTokens(user.id)
+        await saveToken(user.id, (await tokens).refreshToken)
 
+        return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken, refreshToken: (await tokens).refreshToken })
     } catch(e) {
         sendError(res, "Ошибка логина", 500)
         console.log(e)

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import type { Request, Response } from 'express'
 import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.service.ts'
 import { sendSuccess, sendError } from '../utils/apiResponse.ts'
-import { generateTokens, saveToken } from '../services/token.service.ts'
+import { generateTokens, saveToken, refreshService } from '../services/token.service.ts'
 
 export const signUp = async (req: Request, res: Response) => {
     try{
@@ -26,7 +26,7 @@ export const signUp = async (req: Request, res: Response) => {
 
         const newUser = await createUser(email, nickname, hashPassword)
 
-        const tokens = await generateTokens(newUser.id)
+        const tokens = await generateTokens(newUser.id, newUser.role)
         await saveToken(newUser.id, (await tokens).refreshToken)
 
         res.cookie('refreshToken', tokens.refreshToken, {
@@ -37,8 +37,8 @@ export const signUp = async (req: Request, res: Response) => {
         })
         return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken })
     } catch(e){
-        sendError(res, "Ошибка создания пользователя", 500)
         console.log(e)
+        return sendError(res, "Ошибка создания пользователя", 500)
     }
 }
 
@@ -61,7 +61,7 @@ export const login = async (req: Request, res: Response) => {
             return sendError(res, "Почта или пароль не верны", 400)
         }
 
-        const tokens = await generateTokens(user.id)
+        const tokens = await generateTokens(user.id, user.role)
         await saveToken(user.id, (await tokens).refreshToken)
 
         res.cookie('refreshToken', tokens.refreshToken, {
@@ -72,7 +72,27 @@ export const login = async (req: Request, res: Response) => {
         })
         return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken })
     } catch(e) {
-        sendError(res, "Ошибка логина", 500)
         console.log(e)
+        return sendError(res, "Ошибка логина", 500)
+    }
+}
+
+export const refresh = async (req: Request, res: Response) => {
+    try {
+        const { refreshToken } = req.cookies
+        
+        const userData = await refreshService(refreshToken)
+
+        res.cookie('refreshToken', userData.refreshToken, {
+            httpOnly: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        })
+
+        return sendSuccess(res, "Токены обновлены", 200, {
+            accessToken: userData.accessToken
+        })
+    } catch (e) {
+        console.log(e)
+        return sendError(res, "Неавторизован", 401)
     }
 }

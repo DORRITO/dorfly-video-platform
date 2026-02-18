@@ -12,7 +12,8 @@ export const findUserNicknameService = async (nickname: string) => {
             description: true,
             created_at: true,
             followers: true,
-            following: true
+            following: true,
+            role: true
         }
     })
 }
@@ -29,7 +30,8 @@ export const findUserIdService = async (userId: string) => {
             description: true,
             created_at: true,
             followers: true,
-            following: true
+            following: true,
+            role: true
         }
     })
 }
@@ -39,6 +41,16 @@ export const updateUserService = async (userId: string, updates: object) => {
         where: {
             id: userId
         },
-        data: updates
+        data: updates,
+        select: {
+            id: true,
+            nickname: true,
+            avatar: true,
+            description: true,
+            created_at: true,
+            followers: true,
+            following: true,
+            role: true
+        }
     })
 }

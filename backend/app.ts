@@ -1,6 +1,7 @@
 import express from "express"
 import authRoutes from './src/routes/auth.route.ts'
 import profileRoutes from './src/routes/profile.route.ts'
+import categoriesRoutes from './src/routes/categories.route.ts'
 import prisma from "./src/db/client.ts"
 import cookieParser from "cookie-parser"
 import 'dotenv/config'
@@ -11,6 +12,7 @@ app.use(cookieParser())
 
 app.use('/auth', authRoutes)
 app.use('/profile', profileRoutes)
+app.use('/categories', categoriesRoutes)
 
 const start = async () => {
   try {

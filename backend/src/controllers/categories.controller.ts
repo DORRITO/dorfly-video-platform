@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import { sendError, sendSuccess } from '../utils/apiResponse.ts'
-import { addCategoryService } from '../services/categories.service.ts'
+import { addCategoryService, getAllCategoriesService } from '../services/categories.service.ts'
 
 export const createCategory = async (req: Request, res: Response) => {
     try{
@@ -16,5 +16,15 @@ export const createCategory = async (req: Request, res: Response) => {
     } catch(e){
         console.log(e)
         return sendError(res, "Произошла ошибка при создании категории", 500)
+    }
+}
+
+export const getAllCategories = async (req: Request, res: Response) => {
+    try{
+        const allCategories = await getAllCategoriesService()
+        return sendSuccess(res, "Все категории получены", 200, { categories: allCategories })
+    } catch(e){
+        console.log(e)
+        return sendError(res, "Произошла ошибка", 500)
     }
 }

@@ -13,7 +13,7 @@ export const authMiddelware = (req: AuthRequest, res: Response, next: NextFuncti
     if(!token) return sendError(res, "Токен не был предоставлен", 401)
     
     jwt.verify(token, process.env.JWT_ACCESS_SECRET!, (err, decoded) => {
-        if(err) return sendError(res, "Произошла ошибка", 401)
+        if(err) return sendError(res, "Пользователь не авторизован", 401)
         req.userId = (decoded as any).userId
         next()
     })

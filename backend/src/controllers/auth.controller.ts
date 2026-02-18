@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs'
 import type { Request, Response } from 'express'
-import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.services.ts'
+import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.service.ts'
 import { sendSuccess, sendError } from '../utils/apiResponse.ts'
-import { generateTokens, saveToken } from '../services/token.services.ts'
+import { generateTokens, saveToken } from '../services/token.service.ts'
 
 export const signUp = async (req: Request, res: Response) => {
     try{

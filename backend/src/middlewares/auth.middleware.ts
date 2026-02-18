@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response, } from 'express'
 import jwt from "jsonwebtoken"
-import { sendError } from '../utils/apiResponse'
+import { sendError } from '../utils/apiResponse.ts'
 
 interface AuthRequest extends Request {
     userId?: string

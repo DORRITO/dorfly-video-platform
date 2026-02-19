@@ -12,3 +12,12 @@ export const addCategoryService = async (name: string, preview: any) => {
 export const getAllCategoriesService = async () => {
     return await prisma.category.findMany()
 }
+
+export const addSubCategoryService = async (name: string, category_id: string) => {
+    return await prisma.subcategory.create({
+        data: {
+            name: name,
+            category_id: category_id
+        }
+    })
+}

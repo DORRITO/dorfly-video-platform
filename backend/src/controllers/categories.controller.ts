@@ -1,13 +1,13 @@
 import type { Request, Response } from 'express'
 import { sendError, sendSuccess } from '../utils/apiResponse.ts'
-import { addCategoryService, getAllCategoriesService } from '../services/categories.service.ts'
+import { addCategoryService, addSubCategoryService, getAllCategoriesService } from '../services/categories.service.ts'
 
 export const createCategory = async (req: Request, res: Response) => {
     try{
         const { name } = req.body
         const preview = req.file
 
-        if(!name || !preview){
+        if(!name && !preview){
            return sendError(res, "Не все данные были предоставлены", 400)
         }
 
@@ -23,6 +23,23 @@ export const getAllCategories = async (req: Request, res: Response) => {
     try{
         const allCategories = await getAllCategoriesService()
         return sendSuccess(res, "Все категории получены", 200, { categories: allCategories })
+    } catch(e){
+        console.log(e)
+        return sendError(res, "Произошла ошибка", 500)
+    }
+}
+
+export const createSubCategory = async (req: Request, res: Response) => {
+    try{
+        const { name, category_id } = req.body
+
+        if(!name && !category_id){
+            return sendError(res, "Не все данные были предоставлены", 400)
+        }
+
+        const newSubCategory = await addSubCategoryService(name, category_id)
+
+        return sendSuccess(res, "Подкатегория успешно создана", 200, { newSubCategory: newSubCategory })
     } catch(e){
         console.log(e)
         return sendError(res, "Произошла ошибка", 500)

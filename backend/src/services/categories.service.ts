@@ -21,3 +21,14 @@ export const addSubCategoryService = async (name: string, category_id: string) =
         }
     })
 }
+
+export const getSubcategoriesService = async (category_id: string) => {
+    return await prisma.category.findUnique({
+        where: {
+            id: category_id
+        },
+        select: {
+            subcategories: true
+        }
+    })
+}

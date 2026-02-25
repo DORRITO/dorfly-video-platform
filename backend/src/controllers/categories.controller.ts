@@ -7,7 +7,7 @@ export const createCategory = async (req: Request, res: Response) => {
         const { name } = req.body
         const preview = req.file
 
-        if(!name && !preview){
+        if(!name || !preview){
            return sendError(res, "Не все данные были предоставлены", 400)
         }
 

@@ -29,6 +29,7 @@ model User {
 
   token         Token?
   role          Role      @default(USER)
+  likes         Like[]
 }
 
 model Follows {
@@ -77,6 +78,7 @@ model Video {
   subcategory_id String? 
 
   comments       Comment[]
+  likes          Like[]
 }
 
 model Comment {
@@ -89,6 +91,15 @@ model Comment {
   
   author     User     @relation(fields: [author_id], references: [id])
   author_id  String  
+}
+
+model Like {
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  video    Video  @relation(fields: [videoId], references: [id])
+  videoId  String
+
+  @@id([userId, videoId])
 }
 
 model Token {

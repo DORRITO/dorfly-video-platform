@@ -11,7 +11,11 @@ export const findUserNicknameService = async (nickname: string) => {
             avatar: true,
             description: true,
             created_at: true,
-            followers: true,
+            _count: {
+                select: {
+                    followers: true
+                }
+            },
             following: true,
             role: true
         }
@@ -48,7 +52,11 @@ export const updateUserService = async (userId: string, updates: object) => {
             avatar: true,
             description: true,
             created_at: true,
-            followers: true,
+            _count: {
+                select: {
+                    followers: true
+                }
+            },
             following: true,
             role: true
         }

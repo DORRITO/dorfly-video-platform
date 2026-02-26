@@ -4,6 +4,8 @@ import profileRoutes from './src/routes/profile.route.ts'
 import categoriesRoutes from './src/routes/categories.route.ts'
 import videoRoutes from './src/routes/video.route.ts'
 import likeRoutes from './src/routes/like.route.ts'
+import followRoutes from './src/routes/follow.route.ts'
+import commentRoutes from './src/routes/comment.route.ts'
 import prisma from "./src/db/client.ts"
 import cookieParser from "cookie-parser"
 import 'dotenv/config'
@@ -17,6 +19,8 @@ app.use('/profile', profileRoutes)
 app.use('/categories', categoriesRoutes)
 app.use('/video', videoRoutes)
 app.use('/like', likeRoutes)
+app.use('/follow', followRoutes)
+app.use('/comment', commentRoutes)
 
 const start = async () => {
   try {

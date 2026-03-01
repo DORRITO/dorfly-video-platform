@@ -7,19 +7,21 @@ export const uploadVideoService = (
     subcategory_id: string,
     videoFile: any,
     previewFile: any,
-    userId: string
+    userId: string,
+    duration: number
     ) => {
     return prisma.video.create({
         data: {
             title: title,
             description: description,
-            category_id: category_id,
+            categoryId: category_id,
             subcategory_id: subcategory_id || null,
             video_url: videoFile.path,
             preview: previewFile.path,
-            creator_id: userId
+            creator_id: userId,
+            duration_sec: Math.round(duration)
         },
-                select: {
+        select: {
             id: true,
             title: true,
             description: true,
@@ -46,7 +48,8 @@ export const uploadVideoService = (
                     likes: true,
                     comments: true
                 }
-            }
+            },
+            duration_sec: true
         }
     })
 }
@@ -66,7 +69,8 @@ export const getAllVideosService = () => {
                 }
             },
             category: true,
-            subcategory: true
+            subcategory: true,
+            duration_sec: true
         }
     })
 }
@@ -103,7 +107,8 @@ export const getVideoByIdService = async (videoId: string) => {
                     likes: true,
                     comments: true
                 }
-            }
+            },
+            duration_sec: true
         }
     })
 }
@@ -111,7 +116,7 @@ export const getVideoByIdService = async (videoId: string) => {
 export const getVideosByCategoryService = async (caterory_id: string) => {
     return await prisma.video.findMany({
         where: {
-            category_id: caterory_id 
+            categoryId: caterory_id 
         },
         select: {
             id: true,
@@ -126,7 +131,8 @@ export const getVideosByCategoryService = async (caterory_id: string) => {
                 }
             },
             category: true,
-            subcategory: true
+            subcategory: true,
+            duration_sec: true
         }
     })
 }
@@ -149,7 +155,16 @@ export const getVideosBySubCategoryService = async (subcaterory_id: string) => {
                 }
             },
             category: true,
-            subcategory: true
+            subcategory: true,
+            duration_sec: true
+        }
+    })
+}
+
+export const deleteVideoSerivce = async(videoId: string) => {
+    return await prisma.video.delete({
+        where: {
+            id: videoId
         }
     })
 }

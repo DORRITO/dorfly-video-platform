@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+.header{
+    border-bottom: 1px solid $border-color;
+
+    &__container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 15px 0px;
+    }
+
+        &__input{
+            input{
+                width: 500px;
+            }
+        }
+}

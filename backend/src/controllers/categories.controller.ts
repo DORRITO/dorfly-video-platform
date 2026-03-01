@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import { sendError, sendSuccess } from '../utils/apiResponse.ts'
-import { addCategoryService, addSubCategoryService, getAllCategoriesService, getSubcategoriesService } from '../services/categories.service.ts'
+import { addCategoryService, addSubCategoryService, deleteCategorySerivce, getAllCategoriesService, getSubcategoriesService } from '../services/categories.service.ts'
 
 export const createCategory = async (req: Request, res: Response) => {
     try{
@@ -54,9 +54,22 @@ export const getSubcategories = async (req: Request, res: Response) => {
             return sendError(res, "Не передана категория", 400)
         }
 
-        const subcategories = await getSubcategoriesService(category_id)
+        const subcategories = await getSubcategoriesService(category_id as string)
 
         return sendSuccess(res, "Получены подкатегории", 200, { subcategories: subcategories })
+    } catch(e){
+        console.log(e)
+        return sendError(res, "Произошла ошибка", 500)
+    }
+}
+
+export const deleteCategory = async (req: Request, res: Response) => {
+    try{
+        const { category_id } = req.query
+
+        await deleteCategorySerivce(category_id as string)
+
+        return sendSuccess(res, "Категория удалена", 200, { deletedCategory: category_id })
     } catch(e){
         console.log(e)
         return sendError(res, "Произошла ошибка", 500)

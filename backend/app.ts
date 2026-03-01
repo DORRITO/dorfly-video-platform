@@ -1,4 +1,8 @@
 import express from "express"
+import cors from 'cors'
+import path from "node:path"
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import authRoutes from './src/routes/auth.route.ts'
 import profileRoutes from './src/routes/profile.route.ts'
 import categoriesRoutes from './src/routes/categories.route.ts'
@@ -14,6 +18,12 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 
+const corsOptions = {
+  origin: 'http://localhost:5173'
+}
+
+app.use(cors(corsOptions))
+
 app.use('/auth', authRoutes)
 app.use('/profile', profileRoutes)
 app.use('/categories', categoriesRoutes)
@@ -21,6 +31,11 @@ app.use('/video', videoRoutes)
 app.use('/like', likeRoutes)
 app.use('/follow', followRoutes)
 app.use('/comment', commentRoutes)
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const start = async () => {
   try {

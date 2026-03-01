@@ -1,6 +1,14 @@
 import type { Request, Response } from 'express'
 import { sendError, sendSuccess } from '../utils/apiResponse.ts'
-import { getAllVideosService, getVideoByIdService, getVideosByCategoryService, getVideosBySubCategoryService, uploadVideoService } from '../services/video.service.ts'
+import { deleteVideoSerivce, getAllVideosService, getVideoByIdService, getVideosByCategoryService, getVideosBySubCategoryService, uploadVideoService } from '../services/video.service.ts'
+import { getVideoDurationSeconds } from '../utils/videoDuration.ts'
+
+interface VideoWithCreator {
+  id: string
+  creator: {
+    id: string
+  }
+}
 
 export const uploadVideo = async (req: Request, res: Response) => {
     try{
@@ -14,6 +22,8 @@ export const uploadVideo = async (req: Request, res: Response) => {
             return sendError(res, "Видео желательно загрузить", 400)
         }
 
+        const duration = await getVideoDurationSeconds(videoFile.path)
+
         const newVideo = await uploadVideoService(
             title,
             description, 
@@ -21,7 +31,8 @@ export const uploadVideo = async (req: Request, res: Response) => {
             subcategory_id, 
             videoFile, 
             previewFile,
-            userId
+            userId,
+            duration
         )
 
         return sendSuccess(res, "Видео успешно создано", 200, { video: newVideo })
@@ -80,6 +91,25 @@ export const getVideosBySubCategory = async(req: Request, res: Response) => {
         return sendSuccess(res, "Все видео получены", 200, { videos: videos })
     } catch(e){
         console.log(e) 
+        return sendError(res, "Произошла ошибка", 500)
+    }
+}
+
+export const deleteVideo = async(req: Request, res: Response) => {
+    try{
+        const { videoId } = req.query
+        const userId = req.userId as string
+
+        const video = await getVideoByIdService(videoId as string) as VideoWithCreator | null
+
+        if(userId !== video.creator.id) {
+            sendError(res, "Вы не можете удалить чужое видео", 400)
+        }
+
+        await deleteVideoSerivce(videoId as string)
+        return sendSuccess(res, "Видео удалено", 200, { deletedVideo: videoId })
+    } catch(e){
+        console.log(e)
         return sendError(res, "Произошла ошибка", 500)
     }
 }

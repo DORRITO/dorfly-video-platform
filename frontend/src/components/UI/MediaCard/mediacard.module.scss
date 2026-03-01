@@ -1,0 +1,48 @@
+@import "../../../styles/variables";
+
+.InfoCard{
+    width: 100%;
+
+    .MediaCard{
+        width: 100%;
+        min-height: 180px;
+        background-size: cover;
+        border-radius: 20px;
+        padding: 10px;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: end;
+
+        .duration {
+            background: $bg-card;
+            backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 7px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+    }
+
+    .title{
+        font-size: 19px;
+        margin: 4px 0px;
+        font-weight: 600;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: calc(28px * 2);
+    }
+
+    .videoCard{
+        .author{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+    }
+}

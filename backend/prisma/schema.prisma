@@ -52,10 +52,10 @@ model Category {
 }
 
 model Subcategory {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  category    Category @relation(fields: [category_id], references: [id])
-  category_id String 
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  String?
   videos      Video[]
 }
 
@@ -71,14 +71,15 @@ model Video {
   creator        User         @relation(fields: [creator_id], references: [id])
   creator_id     String      
   
-  category       Category     @relation(fields: [category_id], references: [id])
-  category_id    String    
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  String?
   
   subcategory    Subcategory? @relation(fields: [subcategory_id], references: [id])
-  subcategory_id String? 
+  subcategory_id String?
 
   comments       Comment[]
   likes          Like[]
+  duration_sec   Int  @default(0)
 }
 
 model Comment {
@@ -86,7 +87,7 @@ model Comment {
   text       String
   created_at DateTime @default(now())
 
-  video      Video    @relation(fields: [video_id], references: [id])
+  video      Video    @relation(fields: [video_id], references: [id], onDelete: Cascade)
   video_id   String  
   
   author     User     @relation(fields: [author_id], references: [id])
@@ -96,7 +97,8 @@ model Comment {
 model Like {
   user     User   @relation(fields: [userId], references: [id])
   userId   String
-  video    Video  @relation(fields: [videoId], references: [id])
+
+  video    Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
   videoId  String
 
   @@id([userId, videoId])

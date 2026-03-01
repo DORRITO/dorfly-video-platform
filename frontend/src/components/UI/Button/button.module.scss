@@ -1,0 +1,9 @@
+@import "../../../styles/variables";
+
+.button{
+    background: $primary-color;
+    padding: 10px 20px;
+    color: $text-primary;
+    font-size: 15px;
+    border-radius: 10px;
+}

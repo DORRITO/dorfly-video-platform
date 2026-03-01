@@ -1,6 +1,6 @@
 @import "variables";
 @import "mixins";
-@import "reset.scss";
+@import "reset";
 
 [class*="__container"]{
     max-width: 1240px;

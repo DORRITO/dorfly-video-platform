@@ -1,0 +1,82 @@
+@import "../../../styles/variables";
+
+.MainWatchLayout{
+    max-width: 65%;
+
+    &__video{
+        width: 100%;
+        border-radius: 20px;
+        aspect-ratio: 16/9;
+        max-height: 450px;
+        background: $bg-card;
+    }
+
+    &__title{
+        margin: 10px 0px;
+        font-size: 19px;
+        font-weight: 500;
+    }
+
+    &__right{
+        display: flex;
+        gap: 10px;
+    }
+
+    &__info{
+        //background: $bg-card;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        //padding: 10px;
+        border-radius: 10px;
+    }
+
+    &__button{
+        background: $bg-card;
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        gap: 7px;
+        font-size: 18px;
+        border-radius: 10px;
+
+        span{
+            font-size: 16px;
+        }
+    }
+
+    &__comments{
+        margin: 20px 0px;
+        background: $bg-card;
+        padding: 10px 20px;
+        border-radius: 20px;
+    }
+
+    &__comment{
+        padding: 20px 0px;
+        border-bottom: 1px solid $bg-dark;
+
+        &:last-child{
+            border-bottom: none;
+        }
+    }
+
+    &__headerCommentLeft {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        line-height: 100%;
+    }
+
+    &__headerCommentAvatar {
+        img{
+            width: 35px;
+            height: 35px;
+            border-radius: 100%;
+        }
+    }
+
+    &__commentText{
+        margin-top: 10px;
+    }
+}

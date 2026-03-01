@@ -17,7 +17,7 @@ export const addSubCategoryService = async (name: string, category_id: string) =
     return await prisma.subcategory.create({
         data: {
             name: name,
-            category_id: category_id
+            categoryId: category_id
         }
     })
 }
@@ -29,6 +29,14 @@ export const getSubcategoriesService = async (category_id: string) => {
         },
         select: {
             subcategories: true
+        }
+    })
+}
+
+export const deleteCategorySerivce = async (category_id: string) => {
+    return await prisma.category.delete({
+        where: {
+            id: category_id
         }
     })
 }

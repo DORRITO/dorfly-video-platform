@@ -19,6 +19,9 @@ function VideoPage() {
     getCommentsFromVideo(videoId)
   }, [videoId, getVideoFromId, getCommentsFromVideo])
 
+  if(!video) return null
+  console.log(video)
+
   return (
     <div className='VideoPage'>
         <div className="VideoPage__container">

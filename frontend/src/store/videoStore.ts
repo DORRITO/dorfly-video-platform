@@ -2,13 +2,14 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { api } from '../api'
 import { videoRoutes } from '../api/routes/routes'
+import type { Video } from '../types/video'
 
 interface VideosState {
     videos: any[],
     videosFromCategory: any[],
     videosFromSubCategory: any[],
     isLoading: boolean,
-    video: object,
+    video: Video | null,
     getAllVideos: () => Promise<void>,
     getVideosFromCategory: () => Promise<void>,
     getVideosFromSubCategory: () => Promise<void>,
@@ -20,7 +21,7 @@ const useVideoStore = create<VideosState>()(
         videos: [],
         videosFromCategory: [],
         videosFromSubCategory: [],
-        video: {},
+        video: null,
         isLoading: false,
 
         getAllVideos: async () => {
@@ -75,9 +76,9 @@ const useVideoStore = create<VideosState>()(
                 set({ isLoading: true })
 
                 const res = await api.get(videoRoutes.getVideoFromId(videoId))
-                const video = res.data?.data?.video
+                const video = res.data?.data?.video ?? null
 
-                set({ video: video })
+                set({ video })
             } catch(e){
                 console.log(e)
             } finally {

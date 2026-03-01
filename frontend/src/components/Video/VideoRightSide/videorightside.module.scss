@@ -1,0 +1,63 @@
+@import '../../../styles/variables';
+
+.VideoRightSide{
+    width: 30%;
+
+    &__author{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__authorLeft{
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    &__authorAvatar{
+        img{
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 100%;
+        }
+    }
+
+    &__authorInfo{
+        line-height: 100%;
+
+        .nickname{
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .followers{
+            font-size: 14px;
+            margin-top: 7px;
+        }
+    }
+
+    .VideoDescription{
+        background: $bg-card;
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 20px;
+
+        &__title{
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        &__text{
+            margin: 10px 0px;
+        }
+
+        &__categories{
+            a{
+                color: $primary-color;
+            }
+        }
+    }
+}

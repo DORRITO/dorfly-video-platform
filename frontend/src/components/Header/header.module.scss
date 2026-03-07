@@ -16,4 +16,52 @@
                 width: 500px;
             }
         }
+    
+    &__dropdown{
+        position: relative;
+
+        &__body{
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            background: $bg-card;
+            padding: 20px;
+            right: 0;
+            width: 170px;
+            margin-top: 10px;
+            border-radius: 10px;
+            
+        }
+            input{
+                width: 500px;
+            }
+        }
+    
+    &__dropdown{
+        position: relative;
+
+        &__body{
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            background: $bg-card;
+            gap: 10px;
+            padding: 20px;
+            right: 0;
+            width: 170px;
+            margin-top: 10px;
+            border-radius: 10px;
+            
+            &__profile{
+                border-bottom: 1px solid $bg-darker;
+                padding-bottom: 10px;
+                display: flex;
+                gap: 10px;
+
+                span{
+                    color: $primary-color;
+                }
+            }
+        }
+    }
 }

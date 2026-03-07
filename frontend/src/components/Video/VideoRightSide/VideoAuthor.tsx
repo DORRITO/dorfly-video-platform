@@ -1,13 +1,9 @@
 import s from './videorightside.module.scss'
 import DefaultAvatar from '../../../assets/defaultAvatar.jpg'
 import Button from '../../UI/Button/Button'
-import type { Video,Creator } from '../../../types/video'
+import type { VideoAuthorProps } from '../../../types/components/video'
 
-interface Props {
-    video: Video
-}
-
-function VideoAuthor({ video }: Props) {
+function VideoAuthor({ video }: VideoAuthorProps) {
   return (
     <div className={s.VideoRightSide__author}>
         <div className={s.VideoRightSide__authorLeft}>

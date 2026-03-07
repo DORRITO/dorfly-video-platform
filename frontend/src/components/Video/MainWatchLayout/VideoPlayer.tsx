@@ -1,9 +1,6 @@
 import { formatUploadsUrl } from '../../../utils/formatUploadsUrl'
 import s from "./mainwatchlayout.module.scss"
-
-interface VideoPlayerProps {
-    videoUrl: string
-}
+import type { VideoPlayerProps } from '../../../types/components/video'
 
 function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   return (

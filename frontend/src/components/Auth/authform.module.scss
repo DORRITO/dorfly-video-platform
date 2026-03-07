@@ -1,0 +1,36 @@
+@import "../../styles/variables";
+
+.AuthForm{
+    form{
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    &__title{
+        text-align: center;
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+    &__input{
+        input{
+            width: 300px;
+        }
+    }
+
+    &__button{
+        border-radius: 20px;
+        width: 100%;
+    }
+
+    &__switch{
+        text-align: center;
+        margin-top: 10px;
+
+        a{
+            color: $primary-color;
+        }
+    }
+}

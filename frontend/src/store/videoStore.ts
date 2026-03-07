@@ -2,90 +2,93 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { api } from '../api'
 import { videoRoutes } from '../api/routes/routes'
-import type { Video } from '../types/video'
+import type { Video, VideoCategory, VideoSubCategory } from '../types/video'
+import useUIStore from './useUIStore'
 
 interface VideosState {
-    videos: any[],
-    videosFromCategory: any[],
-    videosFromSubCategory: any[],
-    isLoading: boolean,
-    video: Video | null,
-    getAllVideos: () => Promise<void>,
-    getVideosFromCategory: () => Promise<void>,
-    getVideosFromSubCategory: () => Promise<void>,
-    getVideoFromId: () => Promise<void>
+  videos: Video[]
+  videosFromCategory: Video[]
+  videosFromSubCategory: Video[]
+  video: Video | null
+  getAllVideos: () => Promise<void>
+  getVideosFromCategory: (categoryId: VideoCategory['id']) => Promise<void>
+  getVideosFromSubCategory: (subCategoryId: VideoSubCategory['id']) => Promise<void>
+  getVideoById: (videoId: Video['id']) => Promise<void>
+  getVideoByNickname: (nickname: string) => Promise<void>
 }
 
 const useVideoStore = create<VideosState>()(
-    devtools((set) => ({
-        videos: [],
-        videosFromCategory: [],
-        videosFromSubCategory: [],
-        video: null,
-        isLoading: false,
+  devtools((set) => ({
+    videos: [],
+    videosFromCategory: [],
+    videosFromSubCategory: [],
+    video: null,
 
-        getAllVideos: async () => {
-            try{
-                set({ isLoading: true })
+    getAllVideos: async () => {
+      try {
+        useUIStore.getState().startLoading()
+        const res = await api.get(videoRoutes.getAllVideos)
+        const videos = res.data?.data?.videos ?? []
+        set({ videos })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        useUIStore.getState().stopLoading()
+      }
+    },
 
-                const res = api.get(videoRoutes.getAllVideos)
-                const videos = (await res).data?.data?.videos ?? []
+    getVideosFromCategory: async (categoryId) => {
+      try {
+        useUIStore.getState().startLoading()
+        const res = await api.get(videoRoutes.getVideoFromCategory(categoryId))
+        const videos = res.data?.data?.videos ?? []
+        set({ videosFromCategory: videos })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        useUIStore.getState().stopLoading()
+      }
+    },
 
-                set({ videos: videos })
-            } catch(e){
-                console.log(e)
-            } finally {
-                set({ isLoading: false })
-            }
-        },
+    getVideosFromSubCategory: async (subCategoryId) => {
+      try {
+        useUIStore.getState().startLoading()
+        const res = await api.get(videoRoutes.getVideoFromSubCategory(subCategoryId))
+        const videos = res.data?.data?.videos ?? []
+        set({ videosFromSubCategory: videos })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        useUIStore.getState().stopLoading()
+      }
+    },
 
-        getVideosFromCategory: async (categoryId: string) => {
-            try{
-                set({ isLoading: true })
+    getVideoById: async (videoId) => {
+      try {
+        useUIStore.getState().startLoading()
+        const res = await api.get(videoRoutes.getVideoById(videoId))
+        const video = res.data?.data?.video ?? null
+        set({ video })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        useUIStore.getState().stopLoading()
+      }
+    },
 
-                const res = await api.get(videoRoutes.getVideoFromCategory(categoryId))
-                const videos = res.data?.data?.videos
-                    
-                set({ videosFromCategory: videos })
-
-            } catch(e){
-                console.log(e)
-            } finally {
-                set({ isLoading: false })
-            }
-        },
-
-        getVideosFromSubCategory: async (subCategoryId: string) => {
-            try{
-                set({ isLoading: true })
-
-                const res = await api.get(videoRoutes.getVideoFromSubCategory(subCategoryId))
-                const videos = res.data?.data?.videos
-                    
-                set({ videosFromSubCategory: videos })
-
-            } catch(e){
-                console.log(e)
-            } finally {
-                set({ isLoading: false })
-            }
-        },
-
-        getVideoFromId: async (videoId: string) => {
-            try{
-                set({ isLoading: true })
-
-                const res = await api.get(videoRoutes.getVideoFromId(videoId))
-                const video = res.data?.data?.video ?? null
-
-                set({ video })
-            } catch(e){
-                console.log(e)
-            } finally {
-                set({ isLoading: false })
-            }
-        }
-    }))
+    getVideoByNickname: async (nickname) => {
+      try {
+        useUIStore.getState().startLoading()
+        const res = await api.get(videoRoutes.getVideosByNickname(nickname))
+        const videos = res.data?.data?.videos ?? []
+        set({ videos })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        useUIStore.getState().stopLoading()
+      }
+    },
+  }))
 )
 
 export default useVideoStore

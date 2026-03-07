@@ -1,15 +1,9 @@
 import s from './videorightside.module.scss'
 import VideoAuthor from './VideoAuthor'
-import type { Video } from '../../../types/video'
 import VideoDescription from './VideoDescription'
+import type { VideoRightSideProps } from '../../../types/components/video'
 
-interface Props {
-    video: Video
-}
-
-function VideoRightSide({ video }: Props) {
-  console.log(video)
-
+function VideoRightSide({ video }: VideoRightSideProps) {
   return (
     <div className={s.VideoRightSide}>
         <VideoAuthor 

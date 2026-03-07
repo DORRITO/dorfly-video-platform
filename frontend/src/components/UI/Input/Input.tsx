@@ -1,23 +1,21 @@
 import s from './input.module.scss'
+import type { InputProps } from '../../../types/components/ui'
 
-interface InputProps {
-    label?: string,
-    placeholder: string,
-    type: string,
-    icon: any,
-    styles?: string
-}
-
-function Input(props: InputProps) {
+function Input({ label, placeholder, type, icon, styles, value, onChange }: InputProps) {
   return (
-    <div className={`${s.input} ${props.styles && props.styles}`}>
-        {props.label && (
-            <label>{props.label}</label>
-        )}
-        <input type={props.type}  placeholder={props.placeholder} />
-        <div className={s.input__inline__button}>
-            {props.icon}
-        </div>
+    <div className={`${s.input} ${styles ? styles : ''}`}>
+      {label && (
+        <label>{label}</label>
+      )}
+      <input 
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+      <div className={s.input__inline__button}>
+        {icon}
+      </div>
     </div>
   )
 }

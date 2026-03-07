@@ -9,6 +9,10 @@ export const getUserForNickname = async (req: Request, res: Response) => {
 
         const user = await findUserNicknameService(nickname as string)
 
+        if(!user){
+            return sendError(res, "Пользователь не найден", 404)
+        }
+
         return sendSuccess(res, "Данные успешно получены", 200, { user: user })
         
     } catch(e){

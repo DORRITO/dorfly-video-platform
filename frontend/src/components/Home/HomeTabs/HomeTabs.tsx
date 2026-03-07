@@ -1,21 +1,10 @@
-import React from 'react'
 import s from './hometabs.module.scss'
-
-interface TabItem {
-    id: string,
-    label: string
-}
-
-interface HomeTabsProps {
-    tabs: TabItem[],
-    activeTab: TabItem,
-    setActiveTab: (tab: TabItem) => void
-}
+import type { HomeTabsProps } from '../../../types/components/home'
 
 function HomeTabs(props: HomeTabsProps) {
   return (
     <div className={s.HomeTabs}>
-        {props.tabs.map((item, index) => (
+        {props.tabs.map((item) => (
             <div 
                 key={item.id}
                 onClick={() => props.setActiveTab(item)}

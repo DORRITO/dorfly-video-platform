@@ -2,84 +2,60 @@ import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { api } from '../api'
 import { categoryRoutes } from '../api/routes/routes'
-import useVideoStore from './videoStore'
+import type { VideoCategory, VideoSubCategory } from '../types/video'
+import useUIStore from './useUIStore'
+import { sendError } from '../utils/sendDecree'
 
 export type TabItem = { id: string; name: string }
 export const ALL_TAB: TabItem = { id: 'all', name: 'All' }
 
 interface CategoriesState {
-  categories: any[],
-  subCategories: any[],
-  isLoading: boolean,
-
+  categories: VideoCategory[]
+  subCategories: VideoSubCategory[]
   activeTab: TabItem
-
-  getAllCategories: () => Promise<void>,
+  getAllCategories: () => Promise<void>
   getSubCategories: (categoryId: string) => Promise<void>
-
-  initCategoryPage: (categoryId: string) => Promise<void>
-  setActiveTab: (tab: TabItem, categoryId: string) => Promise<void>
+  setActiveTab: (tab: TabItem) => void
 }
 
 const useCategoriesStore = create<CategoriesState>()(
-  devtools((set, get) => ({
+  devtools((set) => ({
     categories: [],
     subCategories: [],
-    isLoading: false,
 
     activeTab: ALL_TAB,
-    tabs: () => [ALL_TAB, ...get().subCategories],
-
     getAllCategories: async () => {
       try {
-        set({ isLoading: true })
+        useUIStore.getState().startLoading()
 
         const res = await api.get(categoryRoutes.getAllCategories)
-
         const categories = res.data?.data?.categories ?? []
-        set({ categories: categories })
-        console.log(categories)
+        set({ categories })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
-        set({ isLoading: false })
+        useUIStore.getState().stopLoading()
       }
     },
 
     getSubCategories: async (categoryId: string) => {
       try{
-        set({ isLoading: true })
+        useUIStore.getState().startLoading()
 
         const res = await api.get(categoryRoutes.getSubCategories(categoryId))
-        const subCategoriesData = res.data?.data?.subcategories?.subcategories
-
-        console.log(res.data)
-        
-        set({ subCategories: subCategoriesData })
+        const subCategories = res.data?.data?.subcategories?.subcategories ?? []
+        set({ subCategories })
 
       } catch(e){
-        console.log(e)
+        sendError(e)
       } finally {
-        set({ isLoading: false })
+        useUIStore.getState().stopLoading()
       }
     },
 
-    initCategoryPage: async(categoryId: string) => {
-      set({ activeTab: ALL_TAB })
-
-      await get().getSubCategories(categoryId)
-      await useVideoStore.getState().getVideosFromCategory(categoryId)
-    },
-
-    setActiveTab: async(tab: TabItem, categoryId: string) => {
+    setActiveTab: (tab: TabItem) => {
       set({ activeTab: tab })
-
-      if(tab.id === 'all'){
-        await useVideoStore.getState().getVideosFromCategory(categoryId)
-      } else {
-        await useVideoStore.getState().getVideosFromSubCategory(tab.id)
-      }
-    }
+    },
   }))
 )
 

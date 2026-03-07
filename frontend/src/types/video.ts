@@ -12,16 +12,16 @@ export type Creator = {
   }
 }
 
-export type VideoCateogry = {
-    id: string,
-    name: string,
-    preview: string
+export type VideoCategory = {
+  id: string
+  name: string
+  preview: string
 }
 
-export type VideoSubCategroies = {
-    id: string,
-    name: string,
-    peview: string
+export type VideoSubCategory = {
+  id: string
+  name: string
+  preview: string
 }
 
 export type Video = {
@@ -34,7 +34,7 @@ export type Video = {
   views_count: number
   duration_sec: number
   _count?: VideoCounts
-  creator: Creator,
-  category: VideoCateogry,
-  subcategory: VideoSubCategroies
+  creator: Creator
+  category: VideoCategory
+  subcategory?: VideoSubCategory | null
 }

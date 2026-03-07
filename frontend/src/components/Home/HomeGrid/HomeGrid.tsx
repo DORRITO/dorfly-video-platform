@@ -5,15 +5,8 @@ import MediaCard from '../../UI/MediaCard/MediaCard'
 import s from './homegrid.module.scss'
 import useVideoStore from '../../../store/videoStore'
 import MediaGrid from '../../UI/MediaGrid/MediaGrid'
-
-interface TabItem {
-    id: string,
-    label: string
-}
-
-interface HomeGridProps {
-    activeTab: TabItem
-}
+import type { Video, VideoCategory } from '../../../types/video'
+import type { HomeGridProps } from '../../../types/components/home'
 
 function HomeGrid(props: HomeGridProps) {
   const navigate = useNavigate()
@@ -24,14 +17,10 @@ function HomeGrid(props: HomeGridProps) {
   const getAllVideos = useVideoStore((state) => state.getAllVideos)
   const videos = useVideoStore((state) => state.videos)
 
-  console.log(videos)
-
-  const isLoading = useCategoriesStore((state) => state.isLoading)
-
   useEffect(() => {
-    getAllCategories()
-    getAllVideos()
-  }, [])
+    void getAllCategories()
+    void getAllVideos()
+  }, [getAllCategories, getAllVideos])
 
   return (
     <div className={s.HomeGrid}>
@@ -39,7 +28,7 @@ function HomeGrid(props: HomeGridProps) {
             <>
             <MediaGrid 
                 items={categories}
-                renderItem={(category) => (
+                renderItem={(category: VideoCategory) => (
                     <MediaCard 
                         id={category.id}
                         name={category.name}
@@ -55,7 +44,7 @@ function HomeGrid(props: HomeGridProps) {
             <>
                 <MediaGrid 
                     items={videos}
-                    renderItem={(video) => (
+                    renderItem={(video: Video) => (
                         <MediaCard 
                             id={video.id}
                             name={video.title}

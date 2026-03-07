@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs'
 import type { Request, Response } from 'express'
-import { chechEmailOnBase, checkNicknameOnBase, createUser } from '../services/auth.service.ts'
+import { chechEmailOnBase, checkNicknameOnBase, createUser, logoutService } from '../services/auth.service.ts'
 import { sendSuccess, sendError } from '../utils/apiResponse.ts'
 import { generateTokens, saveToken, refreshService } from '../services/token.service.ts'
+import { cookieOptions } from '../utils/cookieOptions.ts'
 
 export const signUp = async (req: Request, res: Response) => {
     try{
@@ -29,13 +30,8 @@ export const signUp = async (req: Request, res: Response) => {
         const tokens = await generateTokens(newUser.id, newUser.role)
         await saveToken(newUser.id, (await tokens).refreshToken)
 
-        res.cookie('refreshToken', tokens.refreshToken, {
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
-        })
-        return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken })
+        res.cookie('refreshToken', tokens.refreshToken, cookieOptions)
+        return sendSuccess(res, "Пользователь успешно создан!", 200, { accessToken: (await tokens).accessToken, user: { userId: newUser.id, nickname: newUser.nickname } })
     } catch(e){
         console.log(e)
         return sendError(res, "Ошибка создания пользователя", 500)
@@ -64,13 +60,8 @@ export const login = async (req: Request, res: Response) => {
         const tokens = await generateTokens(user.id, user.role)
         await saveToken(user.id, (await tokens).refreshToken)
 
-        res.cookie('refreshToken', tokens.refreshToken, {
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
-        })
-        return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken })
+        res.cookie('refreshToken', tokens.refreshToken, cookieOptions)
+        return sendSuccess(res, "Успешный вход!", 200, { accessToken: (await tokens).accessToken, user: { userId: user.id, nickname: user.nickname } })
     } catch(e) {
         console.log(e)
         return sendError(res, "Ошибка логина", 500)
@@ -89,10 +80,32 @@ export const refresh = async (req: Request, res: Response) => {
         })
 
         return sendSuccess(res, "Токены обновлены", 200, {
-            accessToken: userData.accessToken
+            accessToken: userData.accessToken,
+            user: {
+                id: userData.user.id,
+                nickname: userData.user.nickname
+            }
         })
     } catch (e) {
         console.log(e)
         return sendError(res, "Неавторизован", 401)
+    }
+}
+
+export const logout = async(req: Request, res: Response) => {
+    try{
+        const refreshToken = req.cookies.refreshToken
+
+        if(!refreshToken){
+            return sendError(res, "Токен не был предоставлен", 400)
+        }
+
+        await logoutService(refreshToken)
+
+        res.clearCookie('refreshToken', cookieOptions)
+        return sendSuccess(res, "Успешный logout", 200)
+    } catch(e){
+        console.log(e)
+        return sendError(res, "Произошла ошибка", 500)
     }
 }

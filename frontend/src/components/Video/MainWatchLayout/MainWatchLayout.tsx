@@ -2,22 +2,9 @@ import s from './mainwatchlayout.module.scss'
 import VideoPlayer from './VideoPlayer'
 import VideoMeta from './VideoMeta'
 import CommentSection from './CommentSection/CommentSection'
+import type { MainWatchLayoutProps } from '../../../types/components/video'
 
-interface VideoProps {
-  video: {
-    video_url: string
-    title: string
-    views_count: number
-    created_at: string,
-    _count: {
-      likes: number
-      comments: number
-    }
-  },
-  comments: any[]
-}
-
-function MainWatchLayout({ video, comments }: VideoProps) {
+function MainWatchLayout({ video, comments }: MainWatchLayoutProps) {
   return (
     <div className={s.MainWatchLayout}>
         <VideoPlayer 

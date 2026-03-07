@@ -22,6 +22,18 @@ export const createUser = async (email: string, nickname: string, hashPassword: 
             email,
             nickname,
             password_hash: hashPassword
+        },
+        select: {
+            id: true,
+            nickname: true
         }
     }) 
+}
+
+export const logoutService = async(refreshToken: string) => {
+    return await prisma.token.delete({
+        where: {
+            refreshToken
+        }
+    })
 }

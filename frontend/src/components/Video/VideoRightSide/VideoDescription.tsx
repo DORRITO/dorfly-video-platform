@@ -1,11 +1,7 @@
 import s from './videorightside.module.scss'
-import type { Video } from '../../../types/video'
+import type { VideoDescriptionProps } from '../../../types/components/video'
 
-interface Props {
-    video: Video
-}
-
-function VideoDescription({ video }: Props) {
+function VideoDescription({ video }: VideoDescriptionProps) {
   return (
     <div className={s.VideoDescription}>
         <div className={s.VideoDescription__title}>О видео:</div>

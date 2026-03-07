@@ -168,3 +168,29 @@ export const deleteVideoSerivce = async(videoId: string) => {
         }
     })
 }
+
+export const getVideosByUserService = async(nickname: string) => {
+    return await prisma.video.findMany({
+        where: {
+            creator: {
+                nickname: nickname
+            }
+        },
+        select: {
+            id: true,
+            title: true,
+            preview: true,
+            views_count: true,
+            created_at: true,
+            creator: {
+                select: {
+                    nickname: true,
+                    avatar: true
+                }
+            },
+            category: true,
+            subcategory: true,
+            duration_sec: true
+        }
+    })
+}

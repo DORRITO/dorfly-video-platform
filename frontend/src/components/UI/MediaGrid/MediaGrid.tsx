@@ -1,14 +1,10 @@
 import s from './mediagrid.module.scss'
+import type { MediaGridProps } from '../../../types/components/ui'
 
-interface MediaGrid {
-    items: any,
-    renderItem: any
-}
-
-function MediaGrid(props: MediaGrid) {
+function MediaGrid<T>({ items, renderItem }: MediaGridProps<T>) {
   return (
     <div className={s.MediaGrid}>
-        {props.items.map((item) => props.renderItem(item))}
+      {items.map((item) => renderItem(item))}
     </div>
   )
 }

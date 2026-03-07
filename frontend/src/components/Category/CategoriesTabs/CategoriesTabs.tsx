@@ -1,17 +1,7 @@
 import s from './categroiestabs.module.scss'
+import type { CategoriesTabsProps } from '../../../types/components/category'
 
-interface TabItem {
-  id: string,
-  name: string
-}
-
-interface CategoriesTabs {
-  tabs: TabItem[],
-  activeTab: TabItem,
-  setActiveTab: (tab: TabItem) => void
-}
-
-function CategoriesTabs(props: CategoriesTabs) {
+function CategoriesTabs(props: CategoriesTabsProps) {
   return (
     <div className={s.CategoriesTabs}>
       {props.tabs.map((tab, index) => (

@@ -1,19 +1,7 @@
 import { HiOutlineHeart, HiOutlineShare } from "react-icons/hi"
 import { formatDate } from "../../../utils/formatDate"
 import s from "./mainwatchlayout.module.scss"
-
-interface VideoMetaProps {
-  video: {
-    video_url: string
-    title: string
-    views_count: number
-    created_at: string,
-    _count: {
-      likes: number
-      comments: number
-    }
-  },
-}
+import type { VideoMetaProps } from "../../../types/components/video"
 
 function VideoMeta({ video }: VideoMetaProps) {
   return (

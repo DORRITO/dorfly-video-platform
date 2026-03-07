@@ -1,16 +1,8 @@
 import s from '../mainwatchlayout.module.scss'
 import CommentHeader from './CommentHeader'
+import type { CommentSectionProps } from '../../../../types/components/video'
 
-interface CommentsProps {
-    video: {
-        _count: {
-            comments: number
-        }
-    },
-    comments: any[]
-}
-
-function CommentSection({ video, comments }: CommentsProps) {
+function CommentSection({ video, comments }: CommentSectionProps) {
   return (
     <div>
         <div className={s.MainWatchLayout__comments}>
@@ -18,7 +10,7 @@ function CommentSection({ video, comments }: CommentsProps) {
                 Комментарии ({video._count?.comments ?? 0}):
             </div>
 
-            {comments.map((item, index) => (
+            {comments.map((item) => (
                 <div key={item.id} className={s.MainWatchLayout__comment}>
                     <CommentHeader item={item} />
 

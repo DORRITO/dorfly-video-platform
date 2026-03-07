@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import { sendError, sendSuccess } from '../utils/apiResponse.ts'
-import { deleteVideoSerivce, getAllVideosService, getVideoByIdService, getVideosByCategoryService, getVideosBySubCategoryService, uploadVideoService } from '../services/video.service.ts'
+import { deleteVideoSerivce, getAllVideosService, getVideoByIdService, getVideosByCategoryService, getVideosBySubCategoryService, getVideosByUserService, uploadVideoService } from '../services/video.service.ts'
 import { getVideoDurationSeconds } from '../utils/videoDuration.ts'
 
 interface VideoWithCreator {
@@ -91,6 +91,22 @@ export const getVideosBySubCategory = async(req: Request, res: Response) => {
         return sendSuccess(res, "Все видео получены", 200, { videos: videos })
     } catch(e){
         console.log(e) 
+        return sendError(res, "Произошла ошибка", 500)
+    }
+}
+
+export const getVideosByUser = async(req: Request, res: Response) => {
+    try{
+        const {nickname} = req.query
+
+        if(!nickname){
+            return sendError(res, "Пользователь не был передан", 400)
+        }
+
+        const videos = await getVideosByUserService(nickname as string)
+        return sendSuccess(res, "Видео получены", 200, { videos: videos })
+    } catch(e){
+        console.log(e)
         return sendError(res, "Произошла ошибка", 500)
     }
 }

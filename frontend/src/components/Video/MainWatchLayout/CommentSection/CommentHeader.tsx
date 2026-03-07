@@ -1,16 +1,8 @@
 import s from '../mainwatchlayout.module.scss'
 import DefaultAvatar from '../../../../assets/defaultAvatar.jpg'
+import type { CommentHeaderProps } from '../../../../types/components/video'
 
-interface ItemProps {
-    item: {
-        author: {
-            nickname: string,
-            avatar: string
-        }
-    }
-}
-
-function CommentHeader({item}: ItemProps) {
+function CommentHeader({item}: CommentHeaderProps) {
   return (
     <div className={s.MainWatchLayout__headerComment}>
         <div className={s.MainWatchLayout__headerCommentLeft}>

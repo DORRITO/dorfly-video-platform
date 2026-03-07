@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useVideoStore from '../../store/videoStore'
 import WatchLayout from '../../components/Video/WatchLayout/WatchLayout'
@@ -6,7 +6,7 @@ import useCommentsStore from '../../store/commentsStore'
 
 function VideoPage() {
   const { videoId } = useParams()
-  const getVideoFromId = useVideoStore((state) => state.getVideoFromId)
+  const getVideoById = useVideoStore((state) => state.getVideoById)
   const video = useVideoStore((state) => state.video)
 
   const getCommentsFromVideo = useCommentsStore((state) => state.getCommentsFromVideo)
@@ -15,12 +15,11 @@ function VideoPage() {
   useEffect(() => {
     if(!videoId) return
 
-    getVideoFromId(videoId)
-    getCommentsFromVideo(videoId)
-  }, [videoId, getVideoFromId, getCommentsFromVideo])
+    void getVideoById(videoId)
+    void getCommentsFromVideo(videoId)
+  }, [videoId, getVideoById, getCommentsFromVideo])
 
   if(!video) return null
-  console.log(video)
 
   return (
     <div className='VideoPage'>

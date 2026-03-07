@@ -1,13 +1,15 @@
 import s from './button.module.scss'
+import type { ButtonProps } from '../../../types/components/ui'
 
-interface buttonProps {
-    onClick?: any,
-    buttonText: any
-}
-
-function Button(props: buttonProps) {
+function Button({ onClick, buttonText, styles, type = 'button' }: ButtonProps) {
   return (
-    <button className={s.button}>{props.buttonText}</button>
+    <button
+      type={type}
+      onClick={onClick}
+      className={`${s.button} ${styles ? styles : ''}`}
+    >
+      {buttonText}
+    </button>
   )
 }
 

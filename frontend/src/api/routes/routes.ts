@@ -27,3 +27,8 @@ export const profileRoutes = {
     getAuthorizedUser: `/profile/`,
     updateProfile: `/profile/update`
 }
+
+export const followRoutes = {
+    toggleFollow: `/follow/toggle`,
+    checkStatus: (followingId: string) => `/follow/check?followingId=${followingId}`
+}

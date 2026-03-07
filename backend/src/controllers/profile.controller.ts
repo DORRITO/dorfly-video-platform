@@ -40,7 +40,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.userId as string
         const updates = req.body
-        const avatar = req.file?.path
+        const avatar = req.file
 
         if (updates.nickname) {
             const findNickname = await checkNicknameOnBase(updates.nickname)

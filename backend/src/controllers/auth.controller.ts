@@ -97,7 +97,7 @@ export const logout = async(req: Request, res: Response) => {
         const refreshToken = req.cookies.refreshToken
 
         if(!refreshToken){
-            return sendError(res, "Токен не был предоставлен", 400)
+            return sendError(res, "Необходимо авторизоваться", 400)
         }
 
         await logoutService(refreshToken)

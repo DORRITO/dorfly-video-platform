@@ -10,7 +10,7 @@ export const authMiddelware = (req: AuthRequest, res: Response, next: NextFuncti
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
 
-    if(!token) return sendError(res, "Токен не был предоставлен", 401)
+    if(!token) return sendError(res, "Необходимо авторизоваться", 401)
     
     jwt.verify(token, process.env.JWT_ACCESS_SECRET!, (err, decoded) => {
         if(err) return sendError(res, "Пользователь не авторизован", 401)

@@ -24,6 +24,19 @@ const useProfileStore = create<ProfileState>()(
             }
         },
 
+        getProfileById: async(userId: string) => {
+            try{
+                useUIStore.getState().startLoading()
+                
+                const res = await api.get(profileRoutes.getProfile(nickname))
+                set({ user: res.data?.data?.user })
+            } catch(e){
+                sendError(e)
+            } finally {
+                useUIStore.getState().stopLoading()
+            }
+        },
+
         getAuthorizedUser: async() => {
             try{
                 useUIStore.getState().startLoading()

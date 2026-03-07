@@ -26,7 +26,7 @@ export const toggleFollow = async (req: Request, res: Response) => {
     }
 }
 
-export const chechFollow = async (req: Request, res: Response) => {
+export const checkFollow = async (req: Request, res: Response) => {
     try{
         const { followingId } = req.query
         const followerId = req.userId as string

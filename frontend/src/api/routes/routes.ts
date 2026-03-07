@@ -15,7 +15,7 @@ export const videoRoutes = {
     getVideoFromCategory: (categoryId: string) => `/video/category?category_id=${categoryId}`,
     getVideoFromSubCategory: (subCategoryId: string) => `/video/subcategory?subcategory_id=${subCategoryId}`,
     getVideoById: (videoId: string) => `/video/video?videoId=${videoId}`,
-    getVideosByNickname: (nickname: string) => `/video/videos?nickname=${nickname}`,
+    getVideosByNickname: (nickname: string) => `/video/videos?nickname=${nickname}`
 }
 
 export const commentsRoutes = {
@@ -31,4 +31,9 @@ export const profileRoutes = {
 export const followRoutes = {
     toggleFollow: `/follow/toggle`,
     checkStatus: (followingId: string) => `/follow/check?followingId=${followingId}`
+}
+
+export const likeRoutes = {
+    toggleLike: `/like/toggle`,
+    checkLike: (videoId: string) => `/like/?videoId=${videoId}`
 }

@@ -88,7 +88,7 @@ const useVideoStore = create<VideosState>()(
       } finally {
         useUIStore.getState().stopLoading()
       }
-    },
+    }
   }))
 )
 

@@ -8,7 +8,7 @@ function HomePage() {
     { id: 'videos', label: "Рекомендации" },
   ]
 
-  const [activeTab, setActiveTab] = useState(homeTabs[0])
+  const [activeTab, setActiveTab] = useState(homeTabs[1])
 
   return (
     <div className='HomePage'>

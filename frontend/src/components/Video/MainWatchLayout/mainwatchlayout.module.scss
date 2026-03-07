@@ -43,6 +43,10 @@
     }
   }
 
+  &__active{
+    color: $primary-color;
+  }
+
   &__comments {
     margin: 22px 0px;
     background: $bg-card;

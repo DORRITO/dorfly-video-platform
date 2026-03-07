@@ -2,8 +2,20 @@ import { HiOutlineHeart, HiOutlineShare } from "react-icons/hi"
 import { formatDate } from "../../../utils/formatDate"
 import s from "./mainwatchlayout.module.scss"
 import type { VideoMetaProps } from "../../../types/components/video"
+import useLikeStore from "../../../store/likeStore"
+import { useEffect } from "react"
 
 function VideoMeta({ video }: VideoMetaProps) {
+  const checkStatusLike = useLikeStore((state) => state.checkStatusLike)
+  const isLike = useLikeStore((state) => state.isLike)
+  const toggleLike = useLikeStore((state) => state.toggleLike)
+
+  const videoId = video.id
+
+  useEffect(() => {
+    checkStatusLike(videoId)
+  }, [videoId])
+
   return (
     <div>
         <div className={s.MainWatchLayout__title}>
@@ -17,7 +29,7 @@ function VideoMeta({ video }: VideoMetaProps) {
             </div>
 
             <div className={s.MainWatchLayout__right}>
-                <div className={s.MainWatchLayout__button}>
+                <div onClick={() => toggleLike(videoId)} className={`${s.MainWatchLayout__button} ${isLike ? s.MainWatchLayout__active : ''}`}>
                     <HiOutlineHeart /> 
                     <span>{video._count?.likes ?? 0}</span>
                 </div>

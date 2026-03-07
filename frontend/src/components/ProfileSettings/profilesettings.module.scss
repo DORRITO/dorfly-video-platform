@@ -1,0 +1,16 @@
+.SettingsForm{
+    width: 50%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    &__title{
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+    &__button{
+        width: 100%;
+    }
+}

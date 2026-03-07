@@ -16,8 +16,23 @@ export const getUserForNickname = async (req: Request, res: Response) => {
         return sendSuccess(res, "Данные успешно получены", 200, { user: user })
         
     } catch(e){
-        sendError(res, "Что то пошло не так", 500)
         console.log(e)
+        return sendError(res, "Что то пошло не так", 500)
+    }
+}
+
+export const getAuthorizedUser = async (req: Request, res: Response) => {
+    try{
+        const userId = req.userId as string
+
+        const user = await findUserIdService(userId)
+        if(!user){
+            return sendError(res, "Пользователь не найден", 404)
+        }
+
+        return sendSuccess(res, "Данные успешно получены", 200, { user: user })
+    } catch(e){
+        return sendError(res, "Что то пошло не так", 500)
     }
 }
 
@@ -25,6 +40,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.userId as string
         const updates = req.body
+        const avatar = req.file?.path
 
         if (updates.nickname) {
             const findNickname = await checkNicknameOnBase(updates.nickname)
@@ -34,12 +50,16 @@ export const updateProfile = async (req: Request, res: Response) => {
             }
         }
 
+        if(avatar){
+            updates.avatar = avatar
+        }
+
         const updatedUser = await updateUserService(userId, updates)
 
         return sendSuccess(res, "Данные успешно обновлены", 200, { user: updatedUser })
         
     } catch (e) {
-        sendError(res, "Что-то пошло не так при обновлении", 500)
         console.log(e)
+        return sendError(res, "Что-то пошло не так при обновлении", 500)
     }
 }

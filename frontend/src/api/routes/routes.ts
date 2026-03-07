@@ -23,5 +23,7 @@ export const commentsRoutes = {
 }
 
 export const profileRoutes = {
-    getProfile: (nickname: string) => `/profile/${nickname}`
+    getProfile: (nickname: string) => `/profile/${nickname}`,
+    getAuthorizedUser: `/profile/`,
+    updateProfile: `/profile/update`
 }

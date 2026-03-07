@@ -33,7 +33,11 @@ export const findUserIdService = async (userId: string) => {
             avatar: true,
             description: true,
             created_at: true,
-            followers: true,
+            _count: {
+                select: {
+                    followers: true
+                }
+            },
             following: true,
             role: true
         }

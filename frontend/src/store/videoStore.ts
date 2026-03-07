@@ -4,6 +4,7 @@ import { api } from '../api'
 import { videoRoutes } from '../api/routes/routes'
 import type { Video, VideoCategory, VideoSubCategory } from '../types/video'
 import useUIStore from './useUIStore'
+import { sendError } from '../utils/sendDecree'
 
 interface VideosState {
   videos: Video[]
@@ -31,7 +32,7 @@ const useVideoStore = create<VideosState>()(
         const videos = res.data?.data?.videos ?? []
         set({ videos })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
         useUIStore.getState().stopLoading()
       }
@@ -44,7 +45,7 @@ const useVideoStore = create<VideosState>()(
         const videos = res.data?.data?.videos ?? []
         set({ videosFromCategory: videos })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
         useUIStore.getState().stopLoading()
       }
@@ -57,7 +58,7 @@ const useVideoStore = create<VideosState>()(
         const videos = res.data?.data?.videos ?? []
         set({ videosFromSubCategory: videos })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
         useUIStore.getState().stopLoading()
       }
@@ -70,7 +71,7 @@ const useVideoStore = create<VideosState>()(
         const video = res.data?.data?.video ?? null
         set({ video })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
         useUIStore.getState().stopLoading()
       }
@@ -83,7 +84,7 @@ const useVideoStore = create<VideosState>()(
         const videos = res.data?.data?.videos ?? []
         set({ videos })
       } catch (e) {
-        console.error(e)
+        sendError(e)
       } finally {
         useUIStore.getState().stopLoading()
       }

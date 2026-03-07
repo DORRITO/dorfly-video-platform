@@ -13,7 +13,7 @@ export type InputProps = {
   type: string
   icon?: ReactNode
   styles?: string
-  value: string
+  value?: string
   onChange: ChangeEventHandler<HTMLInputElement>
 }
 

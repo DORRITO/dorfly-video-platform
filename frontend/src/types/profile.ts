@@ -1,7 +1,7 @@
 export type Profile = {
   id: string
   nickname: string
-  avatar: string
+  avatar: any
   description: string
   created_at: string
   _count: {
@@ -12,7 +12,9 @@ export type Profile = {
 export type ProfileState = {
   user: Profile | null
   isLoading: boolean
-  getProfile: (nickname: string) => Promise<void>
+  getProfile: (nickname: string) => Promise<void>,
+  getAuthorizedUser: () => Promise<void>,
+  updateProfile: (nickname: string, avatar: any, description: string) => Promise<void>
 }
 
 export type ProfileInfoProps = {
